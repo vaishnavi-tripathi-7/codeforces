@@ -33,7 +33,6 @@ with left:
     ✅ See your strongest topics  
     """)
 
-
     st.write("")
 
     username = st.text_input("Enter your Codeforces username:", "")
@@ -43,28 +42,34 @@ with left:
 
     st.session_state.username = username
 
+    # ✅ Add this block for handle validation only
     profile_url = f'https://codeforces.com/api/user.info?handles={username}'
-    submission_url = f'https://codeforces.com/api/user.status?handle={username}'
-    contest_url = f'https://codeforces.com/api/user.rating?handle={username}'
-
     prof = requests.get(profile_url).json()
-    sub = requests.get(submission_url).json()
-    con = requests.get(contest_url).json()
 
-    st.session_state.present_rating = prof['result'][0]['rating']
+    if prof['status'] != 'OK':
+        st.error(f"❌ The handle '{username}' does not exist. Please check and try again.")
+    else:
+        submission_url = f'https://codeforces.com/api/user.status?handle={username}'
+        contest_url = f'https://codeforces.com/api/user.rating?handle={username}'
 
-    st.session_state.p = pd.DataFrame(prof['result'])
-    s = pd.DataFrame(sub['result'])
-    st.session_state.c = pd.DataFrame(con['result'])
+        sub = requests.get(submission_url).json()
+        con = requests.get(contest_url).json()
 
-    st.success(f"Data loaded for **{username}**! Go to the Analysis page ➡️")
+        st.session_state.present_rating = prof['result'][0]['rating']
 
-    df_contest, df_problem, df_unsolved, df_solved = dic_contest_submissions(s)
+        st.session_state.p = pd.DataFrame(prof['result'])
+        s = pd.DataFrame(sub['result'])
+        st.session_state.c = pd.DataFrame(con['result'])
 
-    st.session_state.df_contest = df_contest
-    st.session_state.df_problem = df_problem
-    st.session_state.df_unsolved = df_unsolved
-    st.session_state.df_solved = df_solved
+        st.success(f"Data loaded for **{username}**! Go to the Analysis page ➡️")
+
+        df_contest, df_problem, df_unsolved, df_solved = dic_contest_submissions(s)
+
+        st.session_state.df_contest = df_contest
+        st.session_state.df_problem = df_problem
+        st.session_state.df_unsolved = df_unsolved
+        st.session_state.df_solved = df_solved
+
 
 
 
