@@ -17,8 +17,8 @@ else:
     def has_weak_tag(tags_list):
         return any(tag in weak_tags for tag in tags_list)
 
-    min_limit = present_rating - 200
-    max_limit = present_rating + 300
+    min_limit = present_rating - 500
+    max_limit = present_rating + 500
 
     solved_problem_ids = set(df_solved['problem_id'].unique())
 
