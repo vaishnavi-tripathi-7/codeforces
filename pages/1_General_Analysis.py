@@ -119,7 +119,7 @@ else:
     # ---------------------------------------------------------------------------------------
 
     st.write("----")
-    st.subheader(" Graph of delta increase and decrease ")
+    st.subheader(" Rating Increase and Decrease ")
     st.write("")
     # Make sure 'date' exists
     if "date" not in c.columns:
@@ -172,7 +172,7 @@ else:
 
     st.write("----")
     st.write("")
-    st.subheader(" Rating overtime ")
+    st.subheader(" Rating Overtime ")
     st.write("")
 
     if "date" not in c.columns:
