@@ -9,7 +9,7 @@ present_rating = st.session_state.get("present_rating")
 if tags_solved is None or df_solved is None or present_rating is None:
     st.error("❌ No data found. Please go back to the Home page and enter a username first.")
 else:
-    st.title("📊 Problem Recommendations")
+    st.title("Problem Recommendations")
 
     tags_solved = tags_solved.sort_values('count')
     weak_tags = tags_solved.tail(10)['tag'].unique()
