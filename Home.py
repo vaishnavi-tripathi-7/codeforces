@@ -32,7 +32,7 @@ with left:
     ✅ Track your rating progress  
     ✅ See your strongest topics  
     """)
-    st.write("Built with ❤️ using Streamlit")
+
 
     st.write("")
 
