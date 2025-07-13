@@ -3,7 +3,6 @@ import requests
 import pandas as pd
 from datetime import datetime
 import joblib
-import sklearn
 
 handle = st.session_state.get("username")
 
