@@ -4,7 +4,8 @@ import requests
 from datetime import datetime
 import joblib
 
-@st.cache_resource
+st.title("Codeforces Next Rating Predictor")
+
 def load_model():
     return joblib.load("cf_predictor.pkl")
 
@@ -20,20 +21,21 @@ feature_order = [
     'practice_avg_rating'
 ]
 
-st.title("Codeforces Next Rating Predictor")
+
 
 handle = st.session_state.get("username")
 
+
 if st.button("Predict"):
     if not handle:
-        st.error("❌ Please enter a valid handle.")
+        st.error("Please enter a valid handle.")
         st.stop()
 
     try:
 
         r = requests.get(f"https://codeforces.com/api/user.rating?handle={handle}").json()
         if r['status'] != 'OK' or len(r['result']) < 2:
-            st.error(f"❌ Not enough contests for {handle}")
+            st.error(f" Not enough contests for {handle}")
             st.stop()
 
         df_rating = pd.DataFrame(r['result']).sort_values("ratingUpdateTimeSeconds").reset_index(drop=True)
