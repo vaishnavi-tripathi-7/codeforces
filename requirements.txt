@@ -1,4 +1,4 @@
-﻿altair==5.5.0
+altair==5.5.0
 altex==0.2.0
 attrs==25.3.0
 beautifulsoup4==4.13.4
@@ -21,7 +21,7 @@ htbuilder==0.9.0
 idna==3.10
 Jinja2==3.1.6
 jsonschema==4.24.0
-joblib~=1.5.1
+joblib==1.5.1
 jsonschema-specifications==2025.4.1
 kiwisolver==1.4.8
 lxml==6.0.0
@@ -75,9 +75,8 @@ validators==0.35.0
 watchdog==6.0.0
 zope.interface==7.2
 
-joblib~=1.5.1
-
-streamlit~=1.46.1
-onnxruntime~=1.22.1
+streamlit==1.46.1
+onnxruntime==1.22.1
 
 scikit-learn==1.5.1
+
