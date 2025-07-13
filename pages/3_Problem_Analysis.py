@@ -1,7 +1,7 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 
-from helper import count_tags , get_rating_counts
+from helper import count_tags , get_rating_counts , apply_dark_theme
 import seaborn as sns
 
 unsolved = st.session_state.get("df_unsolved")
@@ -10,16 +10,17 @@ problem = st.session_state.get("df_problem")
 
 
 if  unsolved is None :
-    st.error("❌ No data found. Please go back to the Home page and enter a username first.")
+    st.error("No data found. Please go back to the Home page and enter a username first.")
 else:
 
     #-------------------------------------------------------------------------
 
     st.title("Problem Analysis ")
-    st.write("")
 
-    problem_df = problem
-    solved_df = solved
+    st.write("----")
+
+    problem_df = problem.copy()
+    solved_df = solved.copy()
 
     tried = problem_df.shape[0]
     solved_count = solved_df.shape[0]
@@ -81,6 +82,8 @@ else:
     plt.xticks(rotation=90)
     ax.set_xlabel("Rating")
     ax.set_ylabel("Count")
+    apply_dark_theme(fig, ax)
+    ax.grid(False)
     st.pyplot(fig)
     st.write("")
 
@@ -100,6 +103,8 @@ else:
     plt.xticks(rotation=90)
     ax.set_xlabel("Rating")
     ax.set_ylabel("Count")
+    apply_dark_theme(fig, ax)
+    ax.grid(False)
     st.pyplot(fig)
     st.write("")
 
@@ -126,6 +131,7 @@ else:
         ax.pie(sizes, autopct='%1.1f%%', colors=colors, startangle=90, radius=1)
         ax.legend(labels, title="Verdicts", loc="upper center", bbox_to_anchor=(1.5, 1),
                   prop={'size': 8}, title_fontsize='10')
+        apply_dark_theme(fig, ax)
         st.pyplot(fig)
 
     with left:
@@ -142,6 +148,7 @@ else:
         ax.pie(sizes, autopct='%1.1f%%', colors=colors, startangle=90, radius=1)
         ax.legend(labels, title="Verdicts", loc="upper center", bbox_to_anchor=(1.5, 1),
                   prop={'size': 8}, title_fontsize='10')
+        apply_dark_theme(fig, ax)
         st.pyplot(fig)
     st.write("")
 
@@ -161,8 +168,8 @@ else:
 
     fig, ax = plt.subplots(figsize=(15, 3))
     ax.pie(df['count'], colors=sns.color_palette('pastel')[0:len(df)], radius=1)
-    ax.legend(df['tag'], title="Tags", loc="upper center", bbox_to_anchor=(2, 1),
-              prop={'size': 8}, title_fontsize='10' , ncols=2)
+    ax.legend(df['tag'], title="Tags", loc="upper center", bbox_to_anchor=(2, 1) ,prop={'size': 8}, title_fontsize='10' , ncols=2)
+    apply_dark_theme(fig, ax)
     st.pyplot(fig)
     st.write("")
 

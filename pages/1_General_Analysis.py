@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import datetime
 import plotly.graph_objects as go
 import seaborn as sns
+from helper import apply_dark_theme
 
 
 username = st.session_state.get("username")
@@ -105,21 +106,31 @@ else:
             ], x=0.1, y=-0.15 )])
 
     st.plotly_chart(fig)
-    st.write("----")
+
 
     # ---------------------------------------------------------------------------------------
 
-
-    c_sorted = c.sort_values("ratingUpdateTimeSeconds", ascending=False)
-    contest_data = c_sorted[["contestName", "newRating", "oldRating", "ratingChange", "rank"]]
-    st.subheader("Contest History")
+    st.write("----")
     st.write("")
-    st.dataframe(contest_data , hide_index=True)
+    st.subheader(" Rating overtime ")
+    st.write("")
+
+    if "date" not in c.columns:
+        c["date"] = c["ratingUpdateTimeSeconds"].apply(
+            lambda x: datetime.datetime.fromtimestamp(x)
+        )
+
+    c_sorted = c.sort_values("ratingUpdateTimeSeconds")
+    fig1, ax1 = plt.subplots(figsize=(12, 3))
+    ax1.plot(c_sorted["date"], c_sorted["newRating"], marker=".", color='#aa6f73')
+    apply_dark_theme(fig1, ax1)
+    st.pyplot(fig1)
+    st.write("")
 
     # ---------------------------------------------------------------------------------------
 
     st.write("----")
-    st.subheader(" Rating Increase and Decrease ")
+    st.subheader(" Graph of delta increase and decrease ")
     st.write("")
     # Make sure 'date' exists
     if "date" not in c.columns:
@@ -127,7 +138,6 @@ else:
             lambda x: datetime.datetime.fromtimestamp(x)
         )
     c_sorted = c.sort_values("ratingUpdateTimeSeconds").reset_index()
-
 
     dates = c_sorted["date"]
     ratings = c_sorted["newRating"]
@@ -142,17 +152,21 @@ else:
             color = "red"
         ax1.plot(x, y, color=color, linewidth=2)
 
-    plt.xticks(rotation=90)
+    apply_dark_theme(fig1, ax1)
     st.pyplot(fig1)
     st.write("")
+    st.write("----")
 
-    # ---------------------------------------------------------------------------------------
+    # --------------------------------------------------------------------------------------
+
+
     st.write("----")
     st.write("")
     st.subheader("Rank Distribution")
     st.write("")
     fig, ax = plt.subplots(figsize=(12, 3))
-    sns.histplot(c["rank"], bins=50, color="#8d988d", ax=ax)
+    sns.histplot(c["rank"], bins=50, color="#e5ffe1", ax=ax)
+    apply_dark_theme(fig, ax)
     st.pyplot(fig)
     st.write("")
 
@@ -164,34 +178,24 @@ else:
     st.write("")
 
     fig1, ax1 = plt.subplots(figsize=(12, 3))
-    ax1.plot(c_sorted["date"], c["ratingChange"], marker=".", color='#66545e')
+    ax1.plot(c_sorted["date"], c["ratingChange"], marker=".", color='#d8eeff')
+    apply_dark_theme(fig1, ax1)
     st.pyplot(fig1)
     st.write("")
 
-    # ---------------------------------------------------------------------------------------
 
-    st.write("----")
-    st.write("")
-    st.subheader(" Rating Overtime ")
-    st.write("")
-
-    if "date" not in c.columns:
-        c["date"] = c["ratingUpdateTimeSeconds"].apply(
-            lambda x: datetime.datetime.fromtimestamp(x)
-        )
-
-    c_sorted = c.sort_values("ratingUpdateTimeSeconds")
-    fig1, ax1 = plt.subplots(figsize=(12, 3))
-    ax1.plot(c_sorted["date"], c_sorted["newRating"], marker=".", color='#aa6f73')
-    st.pyplot(fig1)
-    st.write("")
 
     # ---------------------------------------------------------------------------------------
 
+    st.write("------")
 
+    c_sorted = c.sort_values("ratingUpdateTimeSeconds", ascending=False)
+    contest_data = c_sorted[["contestName", "newRating", "oldRating", "ratingChange", "rank"]]
+    st.subheader("Contest History")
+    st.write("")
+    st.dataframe(contest_data, hide_index=True)
 
-
-
+    # ---------------------------------------------------------------------------------------
 
 
 
