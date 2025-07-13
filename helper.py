@@ -22,13 +22,10 @@ def dic_contest_submissions(s):
         problem_rating = problem.get('rating', None)
         participant_type = s['author'].iloc[i].get('participantType', '')
 
-        # ✅ Use contestId + index as unique ID
         problem_id = f"{contest_id}-{problem_index}"
 
-        # For contest → set of unique problems attempted
         dic_contest.setdefault(contest_id, set()).add(problem_id)
 
-        # For problem stats → collect verdicts and participant types
         if problem_id in dic_problem:
             dic_problem[problem_id]['verdict'].append(problem_verdict)
             dic_problem[problem_id]['participantTypes'].add(participant_type)
@@ -43,14 +40,12 @@ def dic_contest_submissions(s):
                 'participantTypes': {participant_type}
             }
 
-    # ✅ Build df_contest
     df_contest = pd.DataFrame([
         {"contestId": k, "problems": list(v)}
         for k, v in dic_contest.items()
     ])
     df_contest['Count_problems'] = df_contest['problems'].apply(len)
 
-    # ✅ Build df_problem
     df_problem = pd.DataFrame([
         {
             "problem_id": k,
@@ -65,7 +60,6 @@ def dic_contest_submissions(s):
         for k, v in dic_problem.items()
     ])
 
-    # ✅ Add verdict counts
     verdicts_correct = {'OK'}
     df_problem['Correct'] = df_problem['verdicts'].apply(
         lambda x: sum(v in verdicts_correct for v in x)
@@ -74,13 +68,11 @@ def dic_contest_submissions(s):
     df_problem['MLE'] = df_problem['verdicts'].apply(lambda x: sum(v == 'MEMORY_LIMIT_EXCEEDED' for v in x))
     df_problem['Wrong'] = df_problem['verdicts'].apply(len) - df_problem['Correct'] - df_problem['TLE'] - df_problem['MLE']
 
-    # ✅ Add flags for CONTESTANT and VIRTUAL
     df_problem['IsContestant'] = df_problem['participantTypes'].apply(lambda x: int('CONTESTANT' in x))
     df_problem['IsVirtual'] = df_problem['participantTypes'].apply(lambda x: int('VIRTUAL' in x))
 
     df_problem.drop(columns=['verdicts', 'participantTypes'], inplace=True)
 
-    # ✅ Split solved/unsolved
     df_unsolved = df_problem[df_problem['Correct'] == 0].copy()
     df_solved = df_problem[df_problem['Correct'] > 0].copy()
 
@@ -137,6 +129,24 @@ def get_solved_during_contest(contest_id: int, handle: str) -> set:
 
     return solved
 
+#---------------------------------------------------------------------------------------------
+
+
+def apply_dark_theme(fig, ax):
+
+    fig.patch.set_facecolor('#111115')
+    ax.set_facecolor('#111115')
+
+    ax.grid(True, color='#333333')
+
+    ax.title.set_color('white')
+    ax.xaxis.label.set_color('white')
+    ax.yaxis.label.set_color('white')
+    ax.tick_params(axis='x', colors='white')
+    ax.tick_params(axis='y', colors='white')
+
+    for spine in ax.spines.values():
+        spine.set_color('white')
 
 
 
